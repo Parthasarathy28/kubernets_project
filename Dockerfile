@@ -1,5 +1,5 @@
 FROM  centos:latest
-MAINTAINER vikashashoke@gmail.com
+MAINTAINER Parthasarathi
 RUN yum install -y httpd \
  zip\
  unzip
@@ -10,3 +10,10 @@ RUN yum install -y httpd \
  RUN rm -rf shine shine.zip
  CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
  EXPOSE 80 22 11
+
+
+#  sshagent(['ansible_demo']) 
+#                 {
+#                     sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50'
+#                     sh 'scp /var/lib/jenkins/workspace/pipelin-demo/* ubuntu@172.31.1.50:/home/ubuntu'
+#                 }
