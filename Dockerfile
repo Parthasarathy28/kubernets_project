@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Add the zip file from the web and store it in /var/www/html
-ADD https://github.com/Parthasarathy28/new-site.git/lifeverse /var/www/html/
+ADD https://github.com/adrianhajdin/project_syncfusion_dashboard.git  /var/www/html/
 
 # Set the working directory
 WORKDIR /var/www/html/
@@ -22,7 +22,9 @@ WORKDIR /var/www/html/
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 70
+
+
 
 
 
