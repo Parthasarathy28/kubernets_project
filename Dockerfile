@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-MAINTAINER Parthasarathi
+MAINTAINER parthasarathi.parandhaman@gmail.com
 
 # Update package list and install apache2, zip, and unzip
 RUN apt-get update && apt-get install -y apt-utils && apt-get install -y curl
