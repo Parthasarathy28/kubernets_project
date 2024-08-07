@@ -1,23 +1,29 @@
-FROM centos:latest
+FROM ubuntu:latest
 MAINTAINER Parthasarathi
 
-# Install Apache HTTP server, zip, and unzip
-RUN yum install -y httpd \
-    zip \
-    unzip
+# Update package list and install apache2, zip, and unzip
+RUN apt-get update && apt-get install -y apt-utils && apt-get install -y curl
+RUN apt-get update && \
+    apt-get install -y apache2 zip unzip && \
+    apt-get clean
 
-# Add and unzip the web template
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page265/shine.zip /var/www/html/
+# Add the zip file from the web and store it in /var/www/html
+ADD https://github.com/Parthasarathy28/new-site.git/lifeverse /var/www/html/
+
+# Set the working directory
 WORKDIR /var/www/html/
-RUN unzip shine.zip && \
-    cp -rvf shine/* . && \
-    rm -rf shine shine.zip
 
-# Start Apache in the foreground
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# Unzip the file, copy the contents, and remove the zip file and the directory created from unzipping
+#RUN unzip carvilla.zip && \
+ #   cp -rvf carvilla /* . && \
+#    rm -rf carvilla  carvilla.zip
 
-# Expose the necessary ports
-EXPOSE 80 
+# Start apache2 in the foreground
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+# Expose port 80
+EXPOSE 80
+
 
 
 
