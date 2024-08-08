@@ -25,21 +25,6 @@ CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 EXPOSE 70
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # FROM  centos:latest
 # MAINTAINER Parthasarathi
 # RUN yum install -y httpd \
