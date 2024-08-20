@@ -1,0 +1,56 @@
+pipeline
+{
+    agent any
+    stages
+    {
+        stage ('git checkout')
+        {
+            steps
+            {
+                git 'https://github.com/Parthasarathy28/kubernets_project.git'
+            }
+        }
+        stage ('sending dockerfile ansible server using ssh agent')
+        {
+            steps
+            {
+                sshagent(['ansible_demo']) 
+                {
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50'
+                    sh 'scp /var/lib/jenkins/workspace/pipelin-demo/* ubuntu@172.31.1.50:/home/ubuntu/'
+                }
+            }   
+        }
+        stage ('docker build images')
+        {
+            steps
+            {
+                sshagent(['ansible_demo']) 
+                {
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50 cd /home/ubuntu'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50 docker build -t $JOB_NAME:v1.$BUILD_ID .'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50 docker image tag $JOB_NAME:v1.$BUILD_ID partha28/$JOB_NAME:v1.$BUILD_ID '
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50 docker image tag $JOB_NAME:v1.$BUILD_ID partha28/$JOB_NAME:latest '
+                    
+                }
+            }   
+        }
+        stage ('docker pushes images to dockerhub')
+        {
+            steps
+            {
+                sshagent(['ansible_demo']) 
+                
+                     {
+                     withCredentials([string(credentialsId: 'dockerhub_passwrd', variable: 'dockerhub_passwrd')])
+                     {
+                     sh "docker login -u partha28 -p ${dockerhub_passwrd}"
+                     sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50 docker image push partha28/$JOB_NAME:v1.$BUILD_ID '
+                     sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.1.50 docker image push partha28/$JOB_NAME:latest '
+                    } 
+                     }
+                
+            }   
+        }
+    }
+}
